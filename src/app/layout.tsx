@@ -3,8 +3,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const geist = Geist({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
 })
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${geistSans.variable}`}>
+    <html lang="en" className={`${geist.className}`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   )
