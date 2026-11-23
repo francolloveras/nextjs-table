@@ -5,6 +5,7 @@ import { TABLE_PARAMS } from '@/ui/table/const'
 
 import { TableColumn, TableFilterConditions, TableModel } from '@/ui/table/type'
 import { PageSearchParams } from '@/lib/type'
+import { cx } from '@/lib/utils'
 
 export default function Table<Data, Model extends TableModel>({
   id,
@@ -66,14 +67,16 @@ export default function Table<Data, Model extends TableModel>({
           <tbody>
             {data.length > 0 ? (
               data.map((row, index) => (
-                <tr
-                  key={index}
-                  className="h-10 bg-white text-neutral-900 hover:bg-neutral-100 *:first:last:rounded-bl-md *:last:last:rounded-br-md"
-                >
+                <tr key={index} className="h-10 bg-white text-neutral-900 hover:bg-neutral-100">
                   {renderColumns.map(({ name, render }) => (
                     <td
                       key={name}
-                      className="text-nowrap border-b border-neutral-200 px-4 py-1 text-sm/6 first:border-l last:border-r"
+                      className={cx(
+                        'text-nowrap border-b border-neutral-200 px-4 py-1 text-sm/6 first:border-l last:border-r',
+                        {
+                          'first:rounded-bl-md last:rounded-br-md': index === data.length - 1,
+                        },
+                      )}
                     >
                       {render ? render(row) : (row[name as keyof Data] as string | number)}
                     </td>
@@ -81,10 +84,10 @@ export default function Table<Data, Model extends TableModel>({
                 </tr>
               ))
             ) : (
-              <tr className="h-10 bg-white text-center text-neutral-900 *:first:last:rounded-bl-md *:last:last:rounded-br-md">
+              <tr className="h-10 bg-white text-center text-neutral-900">
                 <td
                   colSpan={99}
-                  className="border-b border-neutral-200 px-4 py-1 text-sm/6 first:border-l last:border-r"
+                  className="border-b border-neutral-200 px-4 py-1 text-sm/6 first:border-l last:border-r first:rounded-bl-md last:rounded-br-md"
                 >
                   {options?.emptyMessage ?? 'No data to display.'}
                 </td>

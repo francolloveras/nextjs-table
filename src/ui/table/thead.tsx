@@ -50,7 +50,7 @@ export default function Thead<Data, Model extends TableModel>({
 
   return (
     <thead>
-      <tr className="*:first:last:rounded-tl-lg *:last:last:rounded-tr-lg">
+      <tr>
         {renderColumns.map(({ name, label, sortable }) => (
           <th
             key={name}
@@ -65,21 +65,21 @@ export default function Thead<Data, Model extends TableModel>({
               (sortable ? (
                 <button
                   onClick={() => handleSort(name)}
-                  className="flex items-center gap-x-3 rounded px-3 py-1.5 hover:bg-neutral-100"
+                  className="cursor-pointer flex items-center gap-x-3 rounded px-3 py-1.5 hover:bg-neutral-100"
                 >
                   {label}
-                  <div className="-space-y-1.5 text-neutral-600">
+                  <div className="text-neutral-600">
                     <Icon
                       icon="chevronUp"
                       className={cx(
-                        'm-0 block size-3.5 p-0',
+                        'm-0 block size-3.5 -mb-1 p-0',
                         sort?.[0] === name && sort?.[1] === 'asc' && 'text-orange-500',
                       )}
                     />
                     <Icon
                       icon="chevronDown"
                       className={cx(
-                        'm-0 block size-3.5 p-0',
+                        'm-0 block size-3.5 -mt-1 p-0',
                         sort?.[0] === name && sort?.[1] === 'desc' && 'text-orange-500',
                       )}
                     />
