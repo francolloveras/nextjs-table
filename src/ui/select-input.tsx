@@ -121,7 +121,7 @@ export default function SelectInput({
           type="button"
           disabled={disabled}
           className={cx(
-            'cursor-pointer bg-white text-neutral-800 flex items-center h-9.5 w-full rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50',
+            'cursor-pointer bg-white text-neutral-800 flex items-center h-9.5 w-full rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50',
             {
               'pl-3': !icon,
               'outline-red-900': error,
@@ -177,7 +177,7 @@ export default function SelectInput({
                   name={`${name}-search`}
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="w-full rounded border border-neutral-200 px-3 py-1 text-sm outline-none outline-2 -outline-offset-2 placeholder:text-neutral-800 focus:outline-blue-600 "
+                  className="w-full rounded border border-neutral-200 px-3 py-1 text-sm outline-none outline-2 -outline-offset-2 placeholder:text-neutral-800 focus:outline-orange-500 "
                   placeholder="Search..."
                 />
               </div>

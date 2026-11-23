@@ -108,7 +108,7 @@ export default function TableFooter({
                 key={index}
                 variant="outline"
                 className={cx('bg-white p-1.5 h-8.5 hidden sm:block aspect-square', {
-                  'bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:text-white': page === range,
+                  'bg-orange-500 text-white border-orange-500 hover:bg-orange-600 hover:text-white': page === range,
                 })}
                 onClick={() => handlePage(typeof range === 'number' ? range : page)}
                 disabled={typeof range !== 'number'}

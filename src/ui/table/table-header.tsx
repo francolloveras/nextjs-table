@@ -130,7 +130,7 @@ function TableColumns<Data, Model extends TableModel>({
                   >
                     <div
                       className={cx('grid size-4 place-content-center rounded border border-neutral-500', {
-                        'bg-blue-600 text-white border-blue-600': isSelected,
+                        'bg-orange-500 text-white border-orange-500': isSelected,
                       })}
                     >
                       {isSelected && <Icon icon="check" strokeWidth={4} className="mb-0 mt-0.5 size-3" />}
@@ -256,7 +256,7 @@ function TableFilters<Data, Model extends TableModel>({
               className="w-fit border-dashed bg-white py-1.5 text-xs"
               icon={{ icon: 'plus', className: 'size-3.5 mb-0' }}
             >
-              Agregar filtro
+              Add filter
             </Button>
             {isOpen && (
               <FloatingPortal>
@@ -274,7 +274,7 @@ function TableFilters<Data, Model extends TableModel>({
                         <input
                           name={'table-filter-search'}
                           onChange={handleSearchChange}
-                          className="w-full rounded border border-neutral-200 px-3 py-1 text-sm outline-none outline-2 -outline-offset-2 placeholder:text-neutral-800 focus:outline-blue-600 "
+                          className="w-full rounded border border-neutral-200 px-3 py-1 text-sm outline-none outline-2 -outline-offset-2 placeholder:text-neutral-800 focus:outline-orange-500 "
                           placeholder="Search..."
                         />
                       </div>
@@ -298,7 +298,7 @@ function TableFilters<Data, Model extends TableModel>({
                             </Button>
                           ))
                       ) : (
-                        <p className="px-2 py-1.5 italic text-neutral-800">Sin resultados para la búsqueda.</p>
+                        <p className="px-2 py-1.5 italic text-neutral-800">0 results.</p>
                       )}
                     </div>
                   </div>
@@ -311,10 +311,10 @@ function TableFilters<Data, Model extends TableModel>({
           <Button
             onClick={clearFilters}
             variant="outline"
-            className="w-fit border-red-200 bg-red-100 py-1.5 text-xs text-red-900 hover:bg-red-300 hover:text-red-900"
+            className="w-fit border-transparent bg-red-600 py-1.5 text-xs text-white hover:bg-red-700"
             icon={{ icon: 'x', className: 'size-3.5 mb-0' }}
           >
-            Eliminar filtros
+            Delete filters
           </Button>
         )}
       </div>
@@ -407,7 +407,7 @@ function FilterModal<Data, Model extends TableModel>({
         <span className="flex gap-x-1">
           {column.label}{' '}
           {condition && (
-            <span className="block max-w-72 truncate text-blue-600">
+            <span className="block max-w-72 truncate text-orange-500">
               {TABLE_FILTERS_CONDITIONS_LABELS[condition].toLocaleLowerCase()} {filterValueLabel}
             </span>
           )}
@@ -424,7 +424,7 @@ function FilterModal<Data, Model extends TableModel>({
             {...getFloatingProps()}
             className="z-10 flex w-72 flex-col gap-y-2 rounded-md border border-neutral-200 bg-white p-2.5 text-sm text-neutral-900 shadow-sm"
           >
-            <h4 className="text-sm text-neutral-900">Filtrar por {column.label}</h4>
+            <h4 className="text-sm text-neutral-900">Filter for {column.label}</h4>
             <SelectInput
               type="single"
               name={`${name}-filter-condition`}
@@ -473,7 +473,7 @@ function FilterModal<Data, Model extends TableModel>({
                       name={`${name}-filter-value`}
                       value={inputValue ?? ''}
                       onChange={updateInputFilter}
-                      placeholder="Valor a filtrar"
+                      placeholder="Value to filter"
                       disabled={!condition}
                       disableSupportingText
                     />
@@ -490,20 +490,20 @@ function FilterModal<Data, Model extends TableModel>({
                 {numberCondition && (
                   <p className="ml-6 text-xs text-neutral-800">
                     <Icon icon="info" className="mr-1" />
-                    Para filtrar valores negativos, utiliza el signo &quot;-&quot; antes del número.
+                    To filter for negative values, use the &quot;-&quot; sign before the number.
                   </p>
                 )}
               </div>
             ) : null}
             <Button onClick={restartFilter} variant="outline" className="py-1.5">
-              Reiniciar
+              Reset
             </Button>
             <Button
               onClick={() => deleteFilter(name)}
               variant="outline"
-              className="border-red-200 bg-red-100 py-1.5 text-red-900 hover:bg-red-300 hover:text-red-900"
+              className="border-transparent bg-red-500 py-1.5 text-white hover:bg-red-700"
             >
-              Eliminar
+              Delete
             </Button>
           </div>
         </FloatingPortal>

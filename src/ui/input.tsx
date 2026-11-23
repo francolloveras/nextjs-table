@@ -73,7 +73,7 @@ export default function Input({
           name={name}
           type={showPassword ? 'text' : rest.type}
           className={cx(
-            'flex h-9.5 w-full bg-white rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50 readonly:opacity-50 readonly:cursor-not-allowed',
+            'flex h-9.5 w-full bg-white rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50 readonly:opacity-50 readonly:cursor-not-allowed',
             {
               'pl-10': icon,
               'pl-3': !icon,

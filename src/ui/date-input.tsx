@@ -209,7 +209,7 @@ export default function DateInput({
           type="button"
           disabled={disabled ?? readOnly}
           className={cx(
-            'bg-white min-w-52 text-neutral-800 flex items-center h-9.5 w-full rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-neutral-200 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50',
+            'bg-white min-w-52 text-neutral-800 flex items-center h-9.5 w-full rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-neutral-200 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50',
             {
               'pl-3': !icon,
               'outline-red-900': error,
@@ -304,7 +304,7 @@ export default function DateInput({
                         'text-neutral-700': type === 'prev' || type === 'next',
                         'font-semibold': isToday,
                         'bg-neutral-100 rounded-none': isInRange,
-                        'bg-blue-600 text-blue-100 hover:bg-blue-600 hover:text-blue-100':
+                        'bg-orange-500 text-amber-100 hover:bg-orange-500 hover:text-amber-100':
                           isSelected || isSelectedStart || isSelectedEnd,
                         'rounded-l-md': isSelectedStart,
                         'rounded-r-md': isSelectedEnd,
@@ -315,9 +315,9 @@ export default function DateInput({
                       {isToday && (
                         <span
                           className={cx(
-                            'absolute inset-x-1/2 bottom-1.5 h-0.5 w-4 -translate-x-1/2 rounded-full bg-blue-600',
+                            'absolute inset-x-1/2 bottom-1.5 h-0.5 w-4 -translate-x-1/2 rounded-full bg-orange-500',
                             {
-                              'bg-blue-100': isSelected,
+                              'bg-amber-100': isSelected,
                             },
                           )}
                         />
@@ -336,7 +336,7 @@ export default function DateInput({
                       min="0"
                       value={hours}
                       onChange={handleTimeChange(setHours, 'hours')}
-                      className="flex h-8 max-w-24 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none outline-2 -outline-offset-2 ring-offset-neutral-200 focus:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex h-8 max-w-24 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none outline-2 -outline-offset-2 ring-offset-neutral-200 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
                       defaultValue="12"
                       disabled={!selectedValue}
                     />
@@ -347,7 +347,7 @@ export default function DateInput({
                       max="59"
                       value={minutes}
                       onChange={handleTimeChange(setMinutes, 'minutes')}
-                      className="flex h-8 max-w-24 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none outline-2 -outline-offset-2 ring-offset-neutral-200 focus:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex h-8 max-w-24 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none outline-2 -outline-offset-2 ring-offset-neutral-200 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
                       defaultValue="00"
                       disabled={!selectedValue}
                     />

@@ -73,14 +73,14 @@ export default function Thead<Data, Model extends TableModel>({
                       icon="chevronUp"
                       className={cx(
                         'm-0 block size-3.5 p-0',
-                        sort?.[0] === name && sort?.[1] === 'asc' && 'text-blue-600',
+                        sort?.[0] === name && sort?.[1] === 'asc' && 'text-orange-500',
                       )}
                     />
                     <Icon
                       icon="chevronDown"
                       className={cx(
                         'm-0 block size-3.5 p-0',
-                        sort?.[0] === name && sort?.[1] === 'desc' && 'text-blue-600',
+                        sort?.[0] === name && sort?.[1] === 'desc' && 'text-orange-500',
                       )}
                     />
                   </div>
