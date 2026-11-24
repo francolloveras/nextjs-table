@@ -135,9 +135,9 @@ export default async function DemoTable({ searchParams }: { searchParams: PageSe
       render: ({ status }) => (
         <Chip
           className={cx({
-            'border-green-300 text-green-800 bg-green-200': status === STATUSES.PAID,
-            'border-amber-300 text-amber-800 bg-amber-200': status === STATUSES.PENDING,
-            'border-red-300 text-red-800 bg-red-200': status === STATUSES.OVERDUE,
+            'border-emerald-300 bg-emerald-100 text-emerald-800': status === STATUSES.PAID,
+            'border-amber-300 bg-amber-100 text-amber-800': status === STATUSES.PENDING,
+            'border-red-300 bg-red-100 text-red-800': status === STATUSES.OVERDUE,
           })}
         >
           {status}

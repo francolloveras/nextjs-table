@@ -9,7 +9,7 @@ export default function Button({ variant = 'default', className, icon, children,
       {...rest}
       type={rest.type ?? 'button'}
       className={cx(
-        'flex cursor-pointer items-center text-sm w-full gap-x-2 text-nowrap transition-colors disabled:opacity-50 disabled:cursor-not-allowed outline-none outline-2 -outline-offset-2 focus-visible:outline-orange-500',
+        'flex cursor-pointer items-center text-sm w-full gap-x-2 text-nowrap transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed outline-none outline-2 -outline-offset-2 focus-visible:outline-orange-500',
         {
           'h-9.5 rounded-md bg-orange-500 justify-center px-4 py-2 font-medium text-white hover:bg-orange-600':
             variant === 'default',

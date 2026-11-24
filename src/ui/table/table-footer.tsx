@@ -73,7 +73,7 @@ export default function TableFooter({
 
   return (
     <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
-      <p className="text-sm text-neutral-900">
+      <p className="text-sm text-neutral-800">
         Showing <strong className="font-medium">{startIndex}</strong> to{' '}
         <strong className="font-medium">{endIndex}</strong> of <strong className="font-medium">{dataCount}</strong>
         {dataCount !== totalCount && ` (filtered from ${totalCount})`}

@@ -1,1 +1,32 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-neutral-1000: #0f172a;
+  --color-background: #f8fafc;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-neutral-1000);
+  }
+
+  ::selection {
+    background: #fed7aa;
+    color: #431407;
+  }
+
+  a {
+    color: #c2410c;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: #9a3412;
+  }
+}

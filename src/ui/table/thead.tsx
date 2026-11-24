@@ -55,7 +55,7 @@ export default function Thead<Data, Model extends TableModel>({
           <th
             key={name}
             className={cx(
-              'border-y text-nowrap border-neutral-200 bg-white p-1 text-left text-xs font-semibold first:border-l last:border-r first:rounded-tl-md last:rounded-tr-md',
+              'border-y text-nowrap border-neutral-200 bg-neutral-50 p-1 text-left text-xs font-semibold text-neutral-700 first:border-l last:border-r first:rounded-tl-md last:rounded-tr-md',
               {
                 'w-9': name === 'actions',
               },

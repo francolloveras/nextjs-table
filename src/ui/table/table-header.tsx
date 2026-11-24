@@ -311,7 +311,7 @@ function TableFilters<Data, Model extends TableModel>({
           <Button
             onClick={clearFilters}
             variant="outline"
-            className="w-fit border-transparent bg-red-600 py-1.5 text-xs text-white hover:bg-red-700"
+            className="w-fit border-transparent bg-red-600 py-1.5 text-xs text-white hover:bg-red-700 hover:text-white"
             icon={{ icon: 'x', className: 'size-3.5 mb-0' }}
           >
             Delete filters
@@ -509,7 +509,7 @@ function FilterModal<Data, Model extends TableModel>({
             <Button
               onClick={() => deleteFilter(name)}
               variant="outline"
-              className="border-transparent bg-red-500 py-1.5 text-white hover:bg-red-700"
+              className="border-transparent bg-red-600 py-1.5 text-white hover:bg-red-700 hover:text-white"
             >
               Delete
             </Button>

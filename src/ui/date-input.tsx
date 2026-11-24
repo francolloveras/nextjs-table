@@ -316,7 +316,7 @@ export default function DateInput({
                         key={monthIndex}
                         onClick={() => handleMonthClick(monthIndex)}
                         className={cx('h-9 justify-center px-3', {
-                          'bg-primary-600 text-primary-100 hover:bg-primary-600 hover:text-primary-100': isSelected,
+                          'bg-orange-500 text-orange-50 hover:bg-orange-600 hover:text-white': isSelected,
                         })}
                         variant="transparent"
                       >
@@ -378,7 +378,7 @@ export default function DateInput({
                           'text-neutral-700': type === 'prev' || type === 'next',
                           'font-semibold': isToday,
                           'bg-neutral-100 rounded-none': isInRange,
-                          'bg-orange500 text-orange-100 hover:bg-orange-500 hover:text-orange-100':
+                          'bg-orange-500 text-orange-50 hover:bg-orange-600 hover:text-white':
                             isSelected || isSelectedStart || isSelectedEnd,
                           'rounded-l-md': isSelectedStart,
                           'rounded-r-md': isSelectedEnd,

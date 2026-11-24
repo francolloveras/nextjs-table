@@ -53,7 +53,7 @@ export default function Table<Data, Model extends TableModel>({
   const renderClientColumns = clientColumns.filter(({ name }) => !hiddenColumns.includes(name))
 
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-y-4 rounded-lg border border-neutral-200 bg-white p-3 shadow-sm sm:p-4">
       <TableHeader
         id={id}
         columns={clientColumns}
@@ -67,7 +67,7 @@ export default function Table<Data, Model extends TableModel>({
           <tbody>
             {data.length > 0 ? (
               data.map((row, index) => (
-                <tr key={index} className="h-10 bg-white text-neutral-900 hover:bg-neutral-100">
+                <tr key={index} className="h-10 bg-white text-neutral-700 hover:bg-orange-50/60">
                   {renderColumns.map(({ name, render }) => (
                     <td
                       key={name}
@@ -84,7 +84,7 @@ export default function Table<Data, Model extends TableModel>({
                 </tr>
               ))
             ) : (
-              <tr className="h-10 bg-white text-center text-neutral-900">
+              <tr className="h-10 bg-white text-center text-neutral-800">
                 <td
                   colSpan={99}
                   className="border-b border-neutral-200 px-4 py-1 text-sm/6 first:border-l last:border-r first:rounded-bl-md last:rounded-br-md"

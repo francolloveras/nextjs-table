@@ -8,7 +8,7 @@ export default function Chip({
   return (
     <div
       {...rest}
-      className={cx('rounded px-4 py-0.5 border border-neutral-900 text-xs bg-neutral-900 text-neutral-100 w-fit', [
+      className={cx('rounded-full border border-neutral-900 bg-neutral-900 px-3 py-0.5 text-xs font-medium text-neutral-100 w-fit', [
         className,
       ])}
     >
