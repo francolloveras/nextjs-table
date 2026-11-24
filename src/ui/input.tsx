@@ -88,7 +88,7 @@ export default function Input({
           <button
             type="button"
             onClick={toggleShowPassword}
-            className="absolute right-0 top-0 h-full px-3 py-2 text-neutral-900"
+            className="cursor-pointer absolute right-0 top-0 h-full px-3 py-2 text-neutral-900"
           >
             <Icon icon={showPassword ? 'eyeOff' : 'eye'} />
           </button>

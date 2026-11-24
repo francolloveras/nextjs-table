@@ -15,7 +15,7 @@ export default function TableActions({ children }: { children: React.ReactNode }
       <button
         ref={refs.setReference}
         {...getReferenceProps()}
-        className="block rounded border border-transparent px-1.5 py-1 text-sm focus-within:border-neutral-500 focus-within:bg-neutral-200 hover:border-neutral-500 hover:bg-neutral-200"
+        className="cursor-pointer block rounded border border-transparent px-1.5 py-1 text-sm focus-within:border-neutral-500 focus-within:bg-neutral-200 hover:border-neutral-500 hover:bg-neutral-200"
       >
         <Icon icon="ellipsis" strokeWidth={3} />
       </button>
