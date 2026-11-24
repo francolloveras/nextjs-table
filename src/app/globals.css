@@ -19,14 +19,4 @@
     background: #fed7aa;
     color: #431407;
   }
-
-  a {
-    color: #c2410c;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-  }
-
-  a:hover {
-    color: #9a3412;
-  }
 }
