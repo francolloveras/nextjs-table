@@ -18,7 +18,7 @@ export interface TableColumnFilterWithName extends TableColumnFilter {
 interface TableColumnBase<Data, Model extends TableModel> {
   name: string
   label: string
-  type?: 'default' | 'list' | 'date'
+  type?: 'default' | 'list' | 'date' | 'period'
   defaultSort?: 'asc' | 'desc'
   defaultHidden?: boolean
   defaultFilter?: { ui: TableColumnFilter; query?: Model['where'] }
@@ -34,7 +34,7 @@ interface TableColumnDefault<Data, Model extends TableModel> extends TableColumn
 }
 
 interface TableColumnDate<Data, Model extends TableModel> extends TableColumnBase<Data, Model> {
-  type?: 'date'
+  type?: 'date' | 'period'
 }
 
 interface TableColumnList<Data, Model extends TableModel> extends TableColumnBase<Data, Model> {

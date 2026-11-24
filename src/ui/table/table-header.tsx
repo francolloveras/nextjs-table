@@ -351,15 +351,22 @@ function FilterModal<Data, Model extends TableModel>({
   const filterValueLabel = (() => {
     if (multiCondition) {
       if (column.type === 'list') return value?.split(',').join(', ')
-      if (column.type === 'date') {
+      if (column.type === 'date' || column.type === 'period') {
         const [from, to] = value?.split('_') ?? ['', '']
 
-        return `${parse.toDate(from)?.toLocaleDateString('es-AR') ?? ''} - ${parse.toDate(to)?.toLocaleDateString('es-AR') ?? ''}`
+        const formatOptions: Intl.DateTimeFormatOptions | undefined =
+          column.type === 'period' ? { month: 'short', year: 'numeric' } : undefined
+
+        return `${getFilterDate(from, column.type)?.toLocaleDateString('es-AR', formatOptions) ?? ''} - ${getFilterDate(to, column.type)?.toLocaleDateString('es-AR', formatOptions) ?? ''}`
       }
     }
 
     if (column.type === 'date') {
       return parse.toDate(value)?.toLocaleDateString('es-AR')
+    }
+
+    if (column.type === 'period') {
+      return getFilterDate(value, column.type)?.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })
     }
 
     return value
@@ -460,9 +467,10 @@ function FilterModal<Data, Model extends TableModel>({
                       disabled={!condition}
                       disableSupportingText
                     />
-                  ) : column.type === 'date' ? (
+                  ) : column.type === 'date' || column.type === 'period' ? (
                     <DateFilter
                       name={name}
+                      type={column.type}
                       value={value}
                       condition={condition}
                       multiCondition={multiCondition}
@@ -480,16 +488,16 @@ function FilterModal<Data, Model extends TableModel>({
                   )}
                 </div>
                 {multiCondition && (column.type === 'date' || column.type !== 'list') && (
-                  <p className="ml-6 text-xs text-neutral-800">
-                    <Icon icon="info" className="mr-1" />
+                  <p className="flex items-start gap-1.5 ml-6 text-xs text-neutral-800">
+                    <Icon icon="info" className="size-5" />
                     {column.type === 'date'
                       ? 'Selecciona dos fechas para definir el rango de búsqueda.'
                       : 'Escribe los valores separados por coma para filtrar entre ellos.'}
                   </p>
                 )}
                 {numberCondition && (
-                  <p className="ml-6 text-xs text-neutral-800">
-                    <Icon icon="info" className="mr-1" />
+                  <p className="flex items-start gap-1.5 ml-6 text-xs text-neutral-800">
+                    <Icon icon="info" className="size-5" />
                     To filter for negative values, use the &quot;-&quot; sign before the number.
                   </p>
                 )}
@@ -514,12 +522,14 @@ function FilterModal<Data, Model extends TableModel>({
 
 function DateFilter({
   name,
+  type,
   value,
   condition,
   multiCondition,
   updateFilter,
 }: {
   name: string
+  type: 'date' | 'period'
   value?: string
   condition?: TableFilterConditions
   multiCondition: boolean
@@ -527,9 +537,14 @@ function DateFilter({
 }) {
   const [from, to] = value?.split('_') ?? ['', '']
   const [range, setRange] = useState<DateRange | null>({
-    from: parse.toDate(from) ?? null,
-    to: parse.toDate(to) ?? null,
+    from: getFilterDate(from, type),
+    to: getFilterDate(to, type),
   })
+
+  const serializeDate = (date: Date) =>
+    type === 'period'
+      ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+      : parse.toISOString(date)
 
   const handleRangeFilter = (range: DateRange | null) => {
     setRange(range)
@@ -546,7 +561,7 @@ function DateFilter({
       updateFilter({
         name,
         condition,
-        value: `${parse.toISOString(range.from)}_${parse.toISOString(range.to)}`,
+        value: `${serializeDate(range.from)}_${serializeDate(range.to)}`,
       })
     }
   }
@@ -555,6 +570,7 @@ function DateFilter({
     <DateInput
       name={`${name}-filter-value`}
       mode="range"
+      variant={type === 'period' ? 'month' : 'default'}
       value={range}
       onChange={handleRangeFilter}
       disabled={!condition}
@@ -564,16 +580,30 @@ function DateFilter({
     <DateInput
       name={`${name}-filter-value`}
       mode="single"
-      value={parse.toDate(value)}
+      variant={type === 'period' ? 'month' : 'default'}
+      value={getFilterDate(value ?? '', type)}
       onChange={(date) =>
         updateFilter({
           name,
           condition,
-          value: date ? parse.toISOString(date) : '',
+          value: date ? serializeDate(date) : '',
         })
       }
       disabled={!condition}
       disableSupportingText
     />
   )
+}
+
+function getFilterDate(value: string | undefined, type: 'date' | 'period') {
+  if (type === 'date') return parse.toDate(value) ?? null
+
+  const match = /^(\d{4})-(\d{2})$/.exec(value ?? '')
+  if (!match) return null
+
+  const year = Number(match[1])
+  const month = Number(match[2])
+  if (month < 1 || month > 12) return null
+
+  return new Date(year, month - 1, 1)
 }
