@@ -6,7 +6,7 @@ export function cx(...args: ClassValue[]) {
 }
 
 export const parse = {
-  removeAccents: (value: string) => {
+  removeAccents(value: string) {
     const accents: Record<string, string> = {
       á: 'a',
       à: 'a',
@@ -35,7 +35,7 @@ export const parse = {
     return value.replace(/[áàäâãéèëêíìïîóòöôõúùüû]/g, (match) => accents[match])
   },
 
-  toDate: (date: string | undefined) => {
+  toDate(date: string | undefined) {
     if (date === undefined || date === '') return undefined
 
     const [year, month, day] = date.split('-').map(Number)
@@ -46,9 +46,21 @@ export const parse = {
     return newDate
   },
 
-  toISOString: (date: Date | undefined | null) => {
+  toISOString(date: Date | undefined | null) {
     if (!date) return undefined
 
     return date.toISOString().split('T')[0]
+  },
+
+  parseCents(value: string) {
+    const amount = Number(value)
+
+    return Number.isFinite(amount) ? Math.round(amount * 100) : -1
+  },
+
+  formatCents(cents: number) {
+    const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+
+    return currency.format(cents / 100)
   },
 }
