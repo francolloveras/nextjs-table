@@ -36,6 +36,7 @@ export default function DateInput({
   })
 
   const isRange = mode === 'range'
+  const isMonth = variant === 'month'
 
   const today = new Date()
   const todayYear = today.getFullYear()
@@ -78,6 +79,35 @@ export default function DateInput({
     return new Date(date.getFullYear(), date.getMonth(), date.getDate())
   }
 
+  const handleMonthClick = (monthIndex: number) => {
+    const newDate = new Date(year, monthIndex, 1, 12, 0)
+
+    if (isRange) {
+      const { from, to } = (selectedValue as DateRange | null) ?? { from: null, to: null }
+
+      const newRange: DateRange = (() => {
+        if (!from) return { from: newDate, to: null }
+        if (!to) return newDate < from ? { from: newDate, to: from } : { from, to: newDate }
+        if (newDate.toISOString() === from.toISOString()) return { from: null, to: null }
+        if (newDate.toISOString() === to.toISOString()) return { from: newDate, to: null }
+
+        return newDate < from ? { from: newDate, to } : { from, to: newDate }
+      })()
+
+      if (!isControlled) setInternalValue(newRange)
+      onChange?.(newRange)
+      if (newRange.from && newRange.to) closeModal()
+      return
+    }
+
+    if (!isControlled) {
+      setInternalValue(newDate)
+    }
+
+    onChange?.(newDate)
+    closeModal()
+  }
+
   const handleDayClick = ({ day, type }: CalendarDay) => {
     const selectedMonth = type === 'prev' ? month - 1 : type === 'next' ? month + 1 : month
     const newDate = new Date(year, selectedMonth, day, 12, 0)
@@ -96,6 +126,9 @@ export default function DateInput({
       setHours(newDate.getHours().toString())
       setMinutes(newDate.getMinutes().toString())
       onChange?.(newDate)
+      if (variant !== 'datetime') {
+        closeModal()
+      }
     }
 
     if (isRange) {
@@ -142,7 +175,11 @@ export default function DateInput({
     }
 
     if (!isRange && selectedValue instanceof Date) {
-      return variant === 'datetime' ? selectedValue.toISOString() : parse.toISOString(selectedValue)
+      return variant === 'datetime'
+        ? selectedValue.toISOString()
+        : variant === 'month'
+          ? `${selectedValue.getFullYear()}-${String(selectedValue.getMonth() + 1).padStart(2, '0')}`
+          : parse.toISOString(selectedValue)
     }
 
     return ''
@@ -160,7 +197,9 @@ export default function DateInput({
             timeStyle: 'short',
             dateStyle: 'short',
           })
-        : selectedValue.toLocaleDateString('es-AR', { dateStyle: 'short' })
+        : variant === 'month'
+          ? selectedValue.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })
+          : selectedValue.toLocaleDateString('es-AR', { dateStyle: 'short' })
     }
 
     return placeholder ?? 'Seleccionar fecha'
@@ -209,7 +248,7 @@ export default function DateInput({
           type="button"
           disabled={disabled ?? readOnly}
           className={cx(
-            'bg-white min-w-52 text-neutral-800 flex items-center h-9.5 w-full rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-neutral-200 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50',
+            'cursor-pointer bg-white min-w-52 text-neutral-800 flex items-center h-9.5 w-full rounded-md border border-neutral-200 px-3 py-2 text-sm ring-offset-neutral-200 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-800 placeholder:text-neutral-800 outline-none outline-2 -outline-offset-2 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50',
             {
               'pl-3': !icon,
               'outline-red-900': error,
@@ -247,85 +286,121 @@ export default function DateInput({
               <div className="mb-4 flex items-center justify-between gap-x-2">
                 <div className="flex gap-x-1">
                   <Button icon="chevronsLeft" onClick={handlePrevYear} className="size-8 p-0" variant="outline" />
-                  <Button icon="chevronLeft" onClick={handlePrevMonth} className="size-8 p-0" variant="outline" />
+                  {!isMonth && (
+                    <Button icon="chevronLeft" onClick={handlePrevMonth} className="size-8 p-0" variant="outline" />
+                  )}
                 </div>
                 <p className="text-sm font-medium">
-                  {currentDate.toLocaleString('default', { month: 'short' }).toUpperCase()} {year}
+                  {!isMonth && currentDate.toLocaleString('default', { month: 'short' }).toUpperCase()} {year}
                 </p>
                 <div className="flex gap-x-1">
-                  <Button icon="chevronRight" onClick={handleNextMonth} className="size-8 p-0" variant="outline" />
+                  {!isMonth && (
+                    <Button icon="chevronRight" onClick={handleNextMonth} className="size-8 p-0" variant="outline" />
+                  )}
                   <Button icon="chevronsRight" onClick={handleNextYear} className="size-8 p-0" variant="outline" />
                 </div>
               </div>
-              <div className="grid grid-cols-7 justify-items-center">
-                {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map((day) => (
-                  <p key={day} className="pb-2 text-neutral-800">
-                    {day}
-                  </p>
-                ))}
-                {days.map(({ day, type }, index) => {
-                  const isToday = type === 'current' && year === todayYear && month === todayMonth && day === todayDate
+              {variant === 'month' ? (
+                <div className="grid grid-cols-4 gap-2">
+                  {Array.from({ length: 12 }, (_, monthIndex) => {
+                    const monthDate = new Date(year, monthIndex, 1)
 
-                  const currentFullDate = new Date(
-                    type === 'prev' ? year : type === 'next' ? year : year,
-                    type === 'prev' ? month - 1 : type === 'next' ? month + 1 : month,
-                    day,
-                  )
+                    const isSelected =
+                      !isRange &&
+                      selectedValue instanceof Date &&
+                      selectedValue.getFullYear() === year &&
+                      selectedValue.getMonth() === monthIndex
 
-                  const currentMidnight = getDateAtMidnight(currentFullDate)
-
-                  const isSelected =
-                    !isRange &&
-                    selectedValue instanceof Date &&
-                    getDateAtMidnight(selectedValue).getTime() === currentMidnight.getTime()
-
-                  const isSelectedStart =
-                    isRange &&
-                    (selectedValue as DateRange | null)?.from &&
-                    getDateAtMidnight((selectedValue as DateRange).from!).getTime() === currentMidnight.getTime()
-
-                  const isSelectedEnd =
-                    isRange &&
-                    (selectedValue as DateRange | null)?.to &&
-                    getDateAtMidnight((selectedValue as DateRange).to!).getTime() === currentMidnight.getTime()
-
-                  const isInRange =
-                    isRange &&
-                    (selectedValue as DateRange | null)?.from &&
-                    (selectedValue as DateRange | null)?.to &&
-                    currentMidnight >= getDateAtMidnight((selectedValue as DateRange).from!) &&
-                    currentMidnight <= getDateAtMidnight((selectedValue as DateRange).to!)
-
-                  return (
-                    <Button
-                      key={index}
-                      onClick={() => handleDayClick({ day, type })}
-                      className={cx('relative size-9 justify-center p-0', {
-                        'text-neutral-700': type === 'prev' || type === 'next',
-                        'font-semibold': isToday,
-                        'bg-neutral-100 rounded-none': isInRange,
-                        'bg-orange-500 text-amber-100 hover:bg-orange-500 hover:text-amber-100':
-                          isSelected || isSelectedStart || isSelectedEnd,
-                        'rounded-l-md': isSelectedStart,
-                        'rounded-r-md': isSelectedEnd,
-                      })}
-                      variant="transparent"
-                    >
+                    return (
+                      <Button
+                        key={monthIndex}
+                        onClick={() => handleMonthClick(monthIndex)}
+                        className={cx('h-9 justify-center px-3', {
+                          'bg-primary-600 text-primary-100 hover:bg-primary-600 hover:text-primary-100': isSelected,
+                        })}
+                        variant="transparent"
+                      >
+                        {monthDate
+                          .toLocaleString('es-AR', {
+                            month: 'short',
+                          })
+                          .replace('.', '')}
+                      </Button>
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-7 justify-items-center">
+                  {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map((day) => (
+                    <p key={day} className="pb-2 text-neutral-800">
                       {day}
-                      {isToday && (
-                        <span
-                          className={cx(
-                            'absolute inset-x-1/2 bottom-1.5 h-0.5 w-4 -translate-x-1/2 rounded-full bg-orange-500',
-                            {
-                              'bg-amber-100': isSelected,
-                            },
-                          )}
-                        />
-                      )}
-                    </Button>
-                  )
-                })}
-              </div>
+                    </p>
+                  ))}
+                  {days.map(({ day, type }, index) => {
+                    const isToday =
+                      type === 'current' && year === todayYear && month === todayMonth && day === todayDate
+
+                    const currentFullDate = new Date(
+                      type === 'prev' ? year : type === 'next' ? year : year,
+                      type === 'prev' ? month - 1 : type === 'next' ? month + 1 : month,
+                      day,
+                    )
+
+                    const currentMidnight = getDateAtMidnight(currentFullDate)
+
+                    const isSelected =
+                      !isRange &&
+                      selectedValue instanceof Date &&
+                      getDateAtMidnight(selectedValue).getTime() === currentMidnight.getTime()
+
+                    const isSelectedStart =
+                      isRange &&
+                      (selectedValue as DateRange | null)?.from &&
+                      getDateAtMidnight((selectedValue as DateRange).from!).getTime() === currentMidnight.getTime()
+
+                    const isSelectedEnd =
+                      isRange &&
+                      (selectedValue as DateRange | null)?.to &&
+                      getDateAtMidnight((selectedValue as DateRange).to!).getTime() === currentMidnight.getTime()
+
+                    const isInRange =
+                      isRange &&
+                      (selectedValue as DateRange | null)?.from &&
+                      (selectedValue as DateRange | null)?.to &&
+                      currentMidnight >= getDateAtMidnight((selectedValue as DateRange).from!) &&
+                      currentMidnight <= getDateAtMidnight((selectedValue as DateRange).to!)
+
+                    return (
+                      <Button
+                        key={index}
+                        onClick={() => handleDayClick({ day, type })}
+                        className={cx('relative size-9 justify-center p-0', {
+                          'text-neutral-700': type === 'prev' || type === 'next',
+                          'font-semibold': isToday,
+                          'bg-neutral-100 rounded-none': isInRange,
+                          'bg-orange500 text-orange-100 hover:bg-orange-500 hover:text-orange-100':
+                            isSelected || isSelectedStart || isSelectedEnd,
+                          'rounded-l-md': isSelectedStart,
+                          'rounded-r-md': isSelectedEnd,
+                        })}
+                        variant="transparent"
+                      >
+                        {day}
+                        {isToday && (
+                          <span
+                            className={cx(
+                              'absolute inset-x-1/2 bottom-1.5 h-0.5 w-4 -translate-x-1/2 rounded-full bg-orange-500',
+                              {
+                                'bg-orange-100': isSelected,
+                              },
+                            )}
+                          />
+                        )}
+                      </Button>
+                    )
+                  })}
+                </div>
+              )}
               {variant === 'datetime' && (
                 <>
                   <div className="-mx-3 my-1 h-px border-t border-neutral-200" />
@@ -337,7 +412,6 @@ export default function DateInput({
                       value={hours}
                       onChange={handleTimeChange(setHours, 'hours')}
                       className="flex h-8 max-w-24 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none outline-2 -outline-offset-2 ring-offset-neutral-200 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
-                      defaultValue="12"
                       disabled={!selectedValue}
                     />
                     <span className="text-lg">:</span>
@@ -348,7 +422,6 @@ export default function DateInput({
                       value={minutes}
                       onChange={handleTimeChange(setMinutes, 'minutes')}
                       className="flex h-8 max-w-24 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm outline-none outline-2 -outline-offset-2 ring-offset-neutral-200 focus:outline-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
-                      defaultValue="00"
                       disabled={!selectedValue}
                     />
                   </div>
@@ -374,7 +447,7 @@ export default function DateInput({
 
 interface DateInputBase {
   name: string
-  variant?: 'default' | 'datetime'
+  variant?: 'default' | 'datetime' | 'month'
   label?: string
   icon?:
     | IconName
