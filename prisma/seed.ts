@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../src/lib/prisma'
 
 const companies = [
   { name: 'Northstar Analytics', industry: 'Technology', region: 'North America' },

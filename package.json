@@ -8,13 +8,14 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "vercel-build": "prisma generate && next build",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "db:setup": "prisma migrate dev && prisma db seed"
   },
   "dependencies": {
     "@floating-ui/react": "0.27.20",
+    "@prisma/adapter-libsql": "6.19.3",
     "@prisma/client": "6.19.0",
     "clsx": "2.1.1",
     "lodash.merge": "4.6.2",
