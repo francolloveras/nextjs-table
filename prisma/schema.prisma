@@ -7,10 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int    @id @default(autoincrement())
-  username  String @unique
-  firstName String
-  lastName  String
-  role      String
+model Company {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  industry String
+  region   String
+  revenues Revenue[]
+}
+
+model Revenue {
+  id            Int     @id @default(autoincrement())
+  invoiceNumber String  @unique
+  period        String
+  amountCents   Int
+  status        String
+  companyId     Int
+  company       Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
