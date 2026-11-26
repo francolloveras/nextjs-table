@@ -1,0 +1,53 @@
+name: Apply Turso migration
+
+on:
+  workflow_dispatch:
+    inputs:
+      migration:
+        description: Migration folder name under prisma/migrations
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+      TURSO_DATABASE_NAME: ${{ vars.TURSO_DATABASE_NAME }}
+      MIGRATION: ${{ inputs.migration }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Turso CLI
+        run: |
+          curl -sSfL https://get.tur.so/install.sh | bash
+          echo "$HOME/.turso" >> "$GITHUB_PATH"
+
+      - name: Apply migration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "Run this workflow from the main branch."
+            exit 1
+          fi
+
+          if [[ ! "$MIGRATION" =~ ^[0-9]{14}_[a-zA-Z0-9_-]+$ ]]; then
+            echo "Enter a migration folder name, not a path."
+            exit 1
+          fi
+
+          migration_file="prisma/migrations/$MIGRATION/migration.sql"
+          if [[ ! -f "$migration_file" ]]; then
+            echo "Migration file not found: $migration_file"
+            exit 1
+          fi
+
+          turso auth login --headless
+          turso db shell "$TURSO_DATABASE_NAME" < "$migration_file"
